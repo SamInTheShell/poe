@@ -1,0 +1,13 @@
+name: Build and Release
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+jobs:
+  build:
+    uses: ./.github/workflows/build-app.yml
+    secrets:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
