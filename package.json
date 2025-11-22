@@ -8,7 +8,7 @@
     "appId": "com.poe.app",
     "productName": "POE",
     "directories": {
-      "output": "release"
+      "output": "dist-electron"
     },
     "files": [
       "dist/**/*",
