@@ -1,6 +1,6 @@
-# GitHub Workflows for Journal Blocks
+# GitHub Workflows for Poe
 
-This directory contains GitHub Actions workflows for building and releasing the Journal Blocks Electron application.
+This directory contains GitHub Actions workflows for building and releasing the Poe Electron application.
 
 ## Workflows
 

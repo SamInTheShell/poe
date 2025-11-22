@@ -13,6 +13,8 @@ An AI chat tool designed for ad-hoc inference.
 - Read/Write/Find utilities (restricted to the project directory).
 - Local MCP Server support (started in the project directory).
 - Defaults to "Ask" for potential write operations.
+- Forking sessions.
+- Editing/Deleting message history.
 
 It's everything you could love in a CLI coding agent, but for the desktop.
 

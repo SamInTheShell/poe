@@ -82,7 +82,7 @@ jobs:
         tag_name: v${{ needs.generate-version.outputs.version }}
         name: Release v${{ needs.generate-version.outputs.version }}
         body: |
-          ## Journal Blocks v${{ needs.generate-version.outputs.version }}
+          ## Poe v${{ needs.generate-version.outputs.version }}
           
           **Release Date:** ${{ steps.date.outputs.date }}
           
@@ -93,7 +93,7 @@ jobs:
           
           ### Installation
           - **Windows:** Download and run the `.exe` installer
-          - **macOS:** Download the `.dmg`, mount it, and drag Journal Blocks to Applications
+          - **macOS:** Download the `.dmg`, mount it, and drag Poe to Applications
           - **Linux:** Download the `.AppImage`, make it executable, and run it
           
           ---
