@@ -26,7 +26,7 @@ This was all vibe coded and is in active development.
 
 Right now the focus is on just demonstrating what an Desktop AI chat could be.
 
-Despite only supporting Ollama and LM Studio API explicitly, I want to figure something out so it supports every provider under the sun.
+Despite only supporting [Ollama](https://ollama.com/) and [LM Studio](https://lmstudio.ai/) API explicitly, I want to figure something out so it supports every provider under the sun.
 
 Some future feature prospects might include:
 
