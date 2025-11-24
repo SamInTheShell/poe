@@ -33,7 +33,7 @@ export interface ModelConfig {
 export interface ProviderConfig {
   id: string;
   name: string;
-  type: 'ollama' | 'lmstudio';
+  type: 'ollama' | 'lmstudio' | 'gemini' | 'claude';
   baseURL: string;
   apiKey?: string | null;
   models: ModelConfig[];

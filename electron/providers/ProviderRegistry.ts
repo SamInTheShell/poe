@@ -1,6 +1,8 @@
 import { ChatProvider, ProviderConfig } from './types';
 import { OllamaProvider } from './OllamaProvider';
 import { LMStudioProvider } from './LMStudioProvider';
+import { GeminiProvider } from './GeminiProvider';
+import { ClaudeProvider } from './ClaudeProvider';
 
 export class ProviderRegistry {
     private providers = new Map<string, ChatProvider>();
@@ -14,6 +16,12 @@ export class ProviderRegistry {
                 break;
             case 'lmstudio':
                 provider = new LMStudioProvider(config);
+                break;
+            case 'gemini':
+                provider = new GeminiProvider(config);
+                break;
+            case 'claude':
+                provider = new ClaudeProvider(config);
                 break;
             default:
                 throw new Error(`Unknown provider type: ${config.type}`);
