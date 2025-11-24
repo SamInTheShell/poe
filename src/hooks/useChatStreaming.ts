@@ -209,43 +209,6 @@ export const useChatStreaming = (
     }
   }, [state.currentProvider, state.currentModel, state.messages, dispatch, toolExecutionRefs]);
 
-  // Normalize tool call arguments for duplicate detection
-  const normalizeArgs = (args: string | Record<string, unknown>): string => {
-    let parsed: Record<string, unknown>;
-
-    if (typeof args === 'string') {
-      try {
-        parsed = JSON.parse(args);
-      } catch {
-        return args.trim();
-      }
-    } else {
-      parsed = args;
-    }
-
-    const normalized: Record<string, unknown> = {};
-    for (const [key, value] of Object.entries(parsed)) {
-      const trimmedKey = key.trim();
-
-      if (typeof value === 'string') {
-        const trimmed = value.trim();
-        normalized[trimmedKey] = trimmed === '' ? '' : trimmed;
-      } else if (value !== null && value !== undefined) {
-        normalized[trimmedKey] = value;
-      } else {
-        normalized[trimmedKey] = '';
-      }
-    }
-
-    const sortedKeys = Object.keys(normalized).sort();
-    const sorted: Record<string, unknown> = {};
-    for (const key of sortedKeys) {
-      sorted[key] = normalized[key];
-    }
-
-    return JSON.stringify(sorted);
-  };
-
   // Setup chat chunk listener
   const setupChatChunkListener = useCallback(() => {
     window.electronAPI.onChatChunk((chunk: unknown) => {
@@ -281,31 +244,13 @@ export const useChatStreaming = (
             return;
           }
 
-          // Check for duplicate tool call
-          const toolName = toolCall.function.name;
-          const toolArgs = toolCall.function.arguments;
-          const normalizedArgs = normalizeArgs(toolArgs);
+          // Check for duplicate tool call by ID (same exact tool call received multiple times)
+          // This prevents processing the same streaming chunk twice
+          // Note: We allow same tool/args combinations as long as they have different IDs
+          const isDuplicateById = toolExecutionRefs.addedToolCallIdsRef.current.has(toolCall.id);
 
-          const checkDuplicate = (toolCalls: ToolCall[]): boolean => {
-            return toolCalls.some(tc => {
-              const existingToolName = tc.function.name;
-              const existingToolArgs = tc.function.arguments;
-              const normalizedExistingArgs = normalizeArgs(existingToolArgs);
-
-              return existingToolName === toolName && normalizedExistingArgs === normalizedArgs;
-            });
-          };
-
-          const isDuplicateInState = state.messages.some(m => {
-            if (m.role !== 'assistant' || !m.tool_calls) return false;
-            return checkDuplicate(m.tool_calls);
-          });
-
-          const isDuplicateInCurrentMessage = checkDuplicate(toolExecutionRefs.toolCallsInCurrentMessageRef.current);
-          const isDuplicate = isDuplicateInState || isDuplicateInCurrentMessage;
-
-          if (isDuplicate) {
-            console.log('Duplicate tool call detected, skipping:', toolName, normalizedArgs);
+          if (isDuplicateById) {
+            console.log('Duplicate tool call ID detected (already processed), skipping:', toolCall.id);
             return;
           }
 
